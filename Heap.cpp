@@ -5,75 +5,102 @@ using namespace std;
 class Student
 {
 private:
-    int Marks[max];
-
+    int Marks_Min_Heap[max];
+    int Marks_Max_Heap[max];
 public:
     Student()
     {
         for (int i = 0; i < max; i++)
         {
-            Marks[i] = 0;
+            Marks_Min_Heap[i] = 0;
         }
     }
-    void InsertHeap(int Total_Students);
-    void displayheap(int Total_Students);
+    void InsertMinHeap(int Total_Students);
+    void InsertMaxHeap(int Total_Students);
+    void Display_Min_Heap(int Total_Students);
+    void Display_Max_Heap(int Total_Students);
     void showmax(int Total_Students);
     void showmin();
 };
 
-void Student::InsertHeap(int Total_Students)
+void Student::InsertMinHeap(int Total_Students)
 {
     for (int i = 1; i <= Total_Students; i++)
     {
         cout << "Enter marks of the Students" << endl;
-        cin >> Marks[i];
+        cin >> Marks_Min_Heap[i];
 
         int j = i;          // index is equal to j
         int Parent = j / 2; // j is index
 
-        while (Marks[j] <= Marks[Parent] && j != 0) // while the new elements value is less than it's parent
+        while (Marks_Min_Heap[j] <= Marks_Min_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
         {
-            int Temp = Marks[j]; // Swap the data of parent and the newly inserted element.
-            Marks[j] = Marks[Parent];
-            Marks[Parent] = Temp;
+            int Temp = Marks_Min_Heap[j]; // Swap the data of parent and the newly inserted element.
+            Marks_Min_Heap[j] = Marks_Min_Heap[Parent];
+            Marks_Min_Heap[Parent] = Temp;
 
-            j = Parent;     // now the j moves to parents position
-            Parent = j / 2; 
+            j = Parent; // now the j moves to parents position
+            Parent = j / 2;
+        }
+    }
+}
+void Student::InsertMaxHeap(int Total_Students)
+{
+    for (int i = 1; i <= Total_Students; i++)
+    {
+        cout << "Enter marks of the Students" << endl;
+        cin >> Marks_Max_Heap[i];
+
+        int j = i;          // index is equal to j
+        int Parent = j / 2; // j is index
+
+        while (Marks_Max_Heap[j] >= Marks_Max_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
+        {
+            int Temp = Marks_Max_Heap[j]; // Swap the data of parent and the newly inserted element.
+            Marks_Max_Heap[j] = Marks_Max_Heap[Parent];
+            Marks_Max_Heap[Parent] = Temp;
+
+            j = Parent; // now the j moves to parents position
+            Parent = j / 2;
         }
     }
 }
 
-void Student::displayheap(int Total_Students)
+void Student::Display_Min_Heap(int Total_Students)
 {
 
     cout << "Heap is ";
     for (int i = 1; i <= Total_Students; i++)
     {
-        cout << " " << Marks[i];
+        cout << " " << Marks_Min_Heap[i];
+    }
+}
+
+void Student::Display_Max_Heap(int Total_Students)
+{
+
+    cout << "Heap is ";
+    for (int i = 1; i <= Total_Students; i++)
+    {
+        cout << " " << Marks_Max_Heap[i];
     }
 }
 
 void Student::showmax(int Total_Students)
 {
-    int max1 = Marks[0]; // initially 1st element will be maxximum
-    for (int i = 1; i <= Total_Students; i++)
-    {
-        if (max1 < Marks[i]) // if element greater than max1 found then change the max1 to element.
-        {
-            max1 = Marks[i];
-        }
-    }
-    cout << "Maximum marks: " << max1;
+
+    cout << "Maxximum marks in Min Heap: " << Marks_Max_Heap[1];
 }
 
 void Student::showmin()
 {
-    cout << "Minimum marks: " << Marks[1]; // in the min heap the minimum element will be the 1st element
+    cout << "Minimum marks in Min Heap: " << Marks_Min_Heap[1]; // in the min heap the minimum element will be the 1st element
 }
 
 int main()
 {
     Student s1;
+    Student s2;
     int n, choice, total;
     int flag = true;
     cout << endl;
@@ -82,27 +109,33 @@ int main()
     cout << endl;
     while (flag)
     {
-        cout << "\n1.Enter marks of the Student\n2.Display Min heap\n3.Find Max Marks\n4.Find Min Marks\n5.Exit\n\nSelect an Option" << endl;
+        cout << "\n1.Enter marks of the Student to Min Heap\n2.Enter marks of the Student to Max Heap\n3.Display Min heap\n4.Display Max heap\n5.Find Min Marks_Min_Heap\n6.Find Max Marks_Max_Heap\n7.Exit\n\nSelect an Option" << endl;
         cin >> choice;
         switch (choice)
         {
         case 1:
             cout << "How many Students are there ?" << endl;
             cin >> total;
-            s1.InsertHeap(total);
+            s1.InsertMinHeap(total);
             break;
         case 2:
-            s1.displayheap(total);
-
+            cout << "How many Students are there ?" << endl;
+            cin >> total;
+            s2.InsertMaxHeap(total);
             break;
         case 3:
-            s1.showmax(total);
-
+            s1.Display_Min_Heap(total);
             break;
         case 4:
-            s1.showmin();
+            s2.Display_Max_Heap(total);
             break;
         case 5:
+            s1.showmin();
+            break;
+        case 6:
+            s2.showmax(total);
+            break;
+        case 7:
             exit(0);
         default:
             break;

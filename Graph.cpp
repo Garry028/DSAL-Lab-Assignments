@@ -79,7 +79,7 @@ void Graph::BFS(int start_vertex)
 
     int v, u;
     queue<int> q;
-    // cout << start_vertex;
+    cout << start_vertex << " ";
     Visited[start_vertex] = 1;
     q.push(start_vertex);
     while (!q.empty())
@@ -91,6 +91,7 @@ void Graph::BFS(int start_vertex)
             if (Matrix[u][v] == 1 && Visited[v] == 0)
             {
                 // cout << "Adjecent " << v << "Pushed In Queue";
+                cout << v << " ";
                 q.push(v);
                 Visited[v] = 1;
             }
@@ -100,14 +101,15 @@ void Graph::BFS(int start_vertex)
 void Graph::DFS(int start_vertex)
 {
     int Visited[N] = {0};
-    int v, u;
+    int v;
 
     if (Visited[start_vertex] == 0) // for unvisited vertex
     {
+        cout << start_vertex;
         Visited[start_vertex] = 1; // it become visited now
-        for (int i = 0; i <= N; i++)
+        for (v = 1; v <= N; v++)
         {
-            if (Matrix[u][v] == 1 && Visited[v] != 0)
+            if (Matrix[start_vertex][v] == 1 && Visited[v] != 0)
             {
                 DFS(v); // HERE We've used stack using recursion hence no need to add our external stack
             }
@@ -137,16 +139,17 @@ int main()
     Graph g;
     int Strt, choice;
 
-    char flag = true;
+    bool flag = true;
 
     while (flag)
     {
         cout << "______________________________________________________________________\n";
-        cout<<endl;
+        cout << endl;
         cout << "Welcome To Graph !!!" << endl;
         cout << "______________________________________________________________________\n";
-        cout << "\n1.Create Graph\n2.BFS Traversal\n3.DFS Traversal\n4.Display Adjacency Matrix\n5.Exit\n\nWhat Do you Want To Do ?" << endl;
-
+        cout << "\n1.Create Graph\n2.BFS Traversal\n3.DFS Traversal\n4.Display Adjacency Matrix\n5.Exit\n\n"
+             << endl;
+        cout << "Do you want to continue" << endl;
         cin >> choice;
         switch (choice)
         {
@@ -176,7 +179,7 @@ int main()
         char flag2;
         cout << "Do you Want to continue: " << endl;
         cin >> flag2;
-        if (flag2 = 'n')
+        if (flag2 == 'n')
         {
             flag = false;
         }

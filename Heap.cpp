@@ -7,6 +7,7 @@ class Student
 private:
     int Marks_Min_Heap[max];
     int Marks_Max_Heap[max];
+
 public:
     Student()
     {
@@ -25,7 +26,7 @@ public:
 
 void Student::InsertMinHeap(int Total_Students)
 {
-    for (int i = 1; i <= Total_Students; i++)
+    for (int i = 0; i <= Total_Students; i++)
     {
         cout << "Enter marks of the Students" << endl;
         cin >> Marks_Min_Heap[i];
@@ -33,7 +34,7 @@ void Student::InsertMinHeap(int Total_Students)
         int j = i;          // index is equal to j
         int Parent = j / 2; // j is index
 
-        while (Marks_Min_Heap[j] <= Marks_Min_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
+        while (Marks_Min_Heap[j] < Marks_Min_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
         {
             int Temp = Marks_Min_Heap[j]; // Swap the data of parent and the newly inserted element.
             Marks_Min_Heap[j] = Marks_Min_Heap[Parent];
@@ -46,7 +47,7 @@ void Student::InsertMinHeap(int Total_Students)
 }
 void Student::InsertMaxHeap(int Total_Students)
 {
-    for (int i = 1; i <= Total_Students; i++)
+    for (int i = 0; i <= Total_Students; i++)
     {
         cout << "Enter marks of the Students" << endl;
         cin >> Marks_Max_Heap[i];
@@ -54,7 +55,7 @@ void Student::InsertMaxHeap(int Total_Students)
         int j = i;          // index is equal to j
         int Parent = j / 2; // j is index
 
-        while (Marks_Max_Heap[j] >= Marks_Max_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
+        while (Marks_Max_Heap[j] > Marks_Max_Heap[Parent] && j != 0) // while the new elements value is less than it's parent
         {
             int Temp = Marks_Max_Heap[j]; // Swap the data of parent and the newly inserted element.
             Marks_Max_Heap[j] = Marks_Max_Heap[Parent];
@@ -70,7 +71,7 @@ void Student::Display_Min_Heap(int Total_Students)
 {
 
     cout << "Heap is ";
-    for (int i = 1; i <= Total_Students; i++)
+    for (int i = 0; i <= Total_Students; i++)
     {
         cout << " " << Marks_Min_Heap[i];
     }
@@ -80,7 +81,7 @@ void Student::Display_Max_Heap(int Total_Students)
 {
 
     cout << "Heap is ";
-    for (int i = 1; i <= Total_Students; i++)
+    for (int i = 0; i <= Total_Students; i++)
     {
         cout << " " << Marks_Max_Heap[i];
     }
@@ -89,12 +90,12 @@ void Student::Display_Max_Heap(int Total_Students)
 void Student::showmax(int Total_Students)
 {
 
-    cout << "Maxximum marks in Min Heap: " << Marks_Max_Heap[1];
+    cout << "Maxximum marks in Min Heap: " << Marks_Max_Heap[0];
 }
 
 void Student::showmin()
 {
-    cout << "Minimum marks in Min Heap: " << Marks_Min_Heap[1]; // in the min heap the minimum element will be the 1st element
+    cout << "Minimum marks in Min Heap: " << Marks_Min_Heap[0]; // in the min heap the minimum element will be the 1st element
 }
 
 int main()

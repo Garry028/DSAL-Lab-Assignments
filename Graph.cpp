@@ -1,144 +1,186 @@
 #include <iostream>
+#include <bits/stdc++.h>
 #include <queue>
+#define N 6
 using namespace std;
-
-const int N = 10;
-
-class graph
+class Graph
 {
-
-    int n, e;
-
-    int adj[N][N];
+private:
+    int Matrix[N][N]; // this is matrix
+    int Number_Vertices;
+    int Number_Edges;
 
 public:
-    graph()
+    Graph()
     {
-        n = 0;
-        e = 0;
+        Number_Vertices = 0;
+        Number_Edges = 0;
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
             {
-                adj[i][j] = 0;
+                Matrix[i][j] = 0;
             }
         }
     }
-    graph(int n_vertices)
+    Graph(int Number_ver)
     {
-        n = n_vertices;
-        e = 0;
-        for (int i = 0; i < N; i++)
+        Number_Vertices = Number_ver;
+        Number_Edges = 0;
+        for (int i = 0; i < Number_ver; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < Number_ver; j++)
             {
-                adj[i][j] = 0;
+                Matrix[i][j] = 0;
             }
         }
     }
-    graph(int n_vertices, int n_edges)
+    Graph(int Number_ver, int Number_edg)
     {
-        n = n_vertices;
-        e = n_edges;
-        for (int i = 0; i < N; i++)
+        Number_Vertices = Number_ver;
+        Number_Edges = Number_edg;
+        for (int i = 0; i < Number_ver; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < Number_ver; j++)
             {
-                adj[i][j] = 0;
+                Matrix[i][j] = 0;
             }
         }
-        for (int i = 0; i < e; i++)
+        for (int i = 0; i < Number_edg; i++)
         {
             int u, v;
-            cout << "Enter the edge (u,v) ";
+            cout << "Enter the Edge (u,v): " << endl;
             cin >> u >> v;
-            adj[u][v] = 1;
-            adj[v][u] = 1;
+            Matrix[u][v] = 1;
+            Matrix[v][u] = 1;
         }
     }
-    void create_graph(int n_vertices, int n_edges)
-    {
-        n = n_vertices;
-        e = n_edges;
-
-        cout << "Welcome to graph creation ... keep list of edges (u,v) ready for inserting the different edges of graph" << endl;
-
-        for (int i = 0; i < e; i++)
-        {
-            int u, v;
-            cout << "Enter the edge (u,v) number : " << i + 1;
-            cin >> u >> v;
-            adj[u][v] = 1;
-            adj[v][u] = 1;
-        }
-    }
-
-    void display_graph()
-    {
-
-        if (n > 0)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    cout << adj[i][j] << " ";
-                }
-                cout << endl;
-            }
-        }
-        else
-            cout << "Null Graph";
-    }
-
-    void bfs_traversal(int start_vertex)
-    {
-        int visited[N] = {0};
-        queue<int> q;
-        int u, v;
-
-        for (v = 0; v < n; v++)
-        {
-            visited[v] = 0;
-        }
-
-        q.push(start_vertex);
-        visited[start_vertex] = 1;
-
-        cout << "BFS traversal of Graph is : " << endl;
-        while (!q.empty())
-        {
-            u = q.front();
-            cout << u << " ";
-            q.pop();
-            for (v = 0; v < n; v++)
-            {
-                // cout<<"current v = "<<v<<" ";
-                if (adj[u][v] == 1 && visited[v] == 0)
-                {
-                    // cout<<"Adjacent "<<v<<" pushed in queue";
-                    q.push(v);
-                    visited[v] = 1;
-                }
-            }
-        }
-    }
+    void Create_Graph();
+    void BFS(int i);
+    void DFS(int i);
+    void Display_Graph();
 };
+void Graph::Create_Graph()
+{
+    cout << "Enter The Total Number of Edges: " << endl;
+    cin >> Number_Edges;
+    for (int i = 0; i < Number_Edges; i++)
+    {
+        int u, v;
+        cout << "Enter the Start and Destination of the edge: " << i + 1 << endl;
+        cin >> u >> v;
+        Matrix[u][v] = 1;
+        Matrix[v][u] = 1;
+    }
+}
+void Graph::BFS(int start_vertex)
+{
+    int Visited[N] = {0};
 
+    int v, u;
+    queue<int> q;
+    // cout << start_vertex;
+    Visited[start_vertex] = 1;
+    q.push(start_vertex);
+    while (!q.empty())
+    {
+        u = q.front();
+        q.pop();
+        for (v = 1; v <= N; v++)
+        {
+            if (Matrix[u][v] == 1 && Visited[v] == 0)
+            {
+                // cout << "Adjecent " << v << "Pushed In Queue";
+                q.push(v);
+                Visited[v] = 1;
+            }
+        }
+    }
+}
+void Graph::DFS(int start_vertex)
+{
+    int Visited[N] = {0};
+    int v, u;
+
+    if (Visited[start_vertex] == 0) // for unvisited vertex
+    {
+        Visited[start_vertex] = 1; // it become visited now
+        for (int i = 0; i <= N; i++)
+        {
+            if (Matrix[u][v] == 1 && Visited[v] != 0)
+            {
+                DFS(v); // HERE We've used stack using recursion hence no need to add our external stack
+            }
+        }
+    }
+}
+void Graph::Display_Graph()
+{
+    if (N > 0)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                cout << Matrix[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+    else
+    {
+        cout << "Null Graph" << endl;
+    }
+}
 int main()
 {
+    Graph g;
+    int Strt, choice;
 
-    graph g;
-    // graph g(4);
-    // graph g(4,4);
+    char flag = true;
 
-    g.display_graph();
+    while (flag)
+    {
+        cout << "______________________________________________________________________\n";
+        cout<<endl;
+        cout << "Welcome To Graph !!!" << endl;
+        cout << "______________________________________________________________________\n";
+        cout << "\n1.Create Graph\n2.BFS Traversal\n3.DFS Traversal\n4.Display Adjacency Matrix\n5.Exit\n\nWhat Do you Want To Do ?" << endl;
 
-    g.create_graph(4, 4);
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            g.Create_Graph();
+            break;
+        case 2:
+            cout << "Enter the starting vertex for BFS: " << endl;
+            cin >> Strt;
+            g.BFS(Strt);
+            break;
+        case 3:
+            cout << "Enter the starting vertex for DFS: " << endl;
+            cin >> Strt;
+            g.DFS(Strt);
+            break;
+        case 4:
+            g.Display_Graph();
 
-    g.display_graph();
-
-    g.bfs_traversal(0);
+            break;
+        case 5:
+            exit(0);
+            break;
+        default:
+            break;
+        }
+        char flag2;
+        cout << "Do you Want to continue: " << endl;
+        cin >> flag2;
+        if (flag2 = 'n')
+        {
+            flag = false;
+        }
+    }
 
     return 0;
 }

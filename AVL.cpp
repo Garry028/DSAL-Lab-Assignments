@@ -1,237 +1,337 @@
+// This is not lab assignment beacause it is not dictionary it's just implementation of AVL tree with all it's operation.
 #include <iostream>
-#include <iomanip>
+#include <bits/stdc++.h>
+
 using namespace std;
-
-class node
+class AVL;
+class Node
 {
-    int key;
-    string meaning;
-    node *left, *right;
-    int height;
+private:
+    int data;
+    Node *left;
+    Node *right;
 
 public:
-    node()
+    Node(int value)
     {
-        left = right = NULL;
-        height = 1;
-        meaning = "";
-        key = -1;
+        data = value;
+        left = NULL;
+        right = NULL;
     }
-    node(int key, string meaning)
-    {
-        this->key = key;
-        this->meaning = meaning;
-        left = right = NULL;
-        height = 1;
-    }
-    void print()
-    {
-        cout << endl
-             << setw(10) << key << setw(10) << meaning;
-    }
-    friend class Dictionary;
+    friend class AVL;
 };
-class Dictionary
+class AVL
 {
-    node *root;
+private:
+    Node *root;
 
 public:
-    Dictionary()
+    AVL()
     {
         root = NULL;
     }
-    int max(int, int);
-    int getheight(node *);
-    node *insert(node *rnode, int key, string meaning);
-    void insertInit(int key, string meaning);
-    node *rightRotate(node *);
-    node *leftRotate(node *);
-    int getbalance(node *);
-    void preorder();
-    void preorderRec(node *);
-    void postorder();
-    void postorderRec(node *);
-    void inorder();
-    void inorderRec(node *);
-    void postorder_dec();
-    void postorder_dec(node *);
+    int Height(Node *root);
+    int BalanceFactor(Node *root);
+    Node *LL_Rotation(Node *root);
+    Node *RR_Rotation(Node *root);
+    Node *RL_Rotation(Node *root);
+    Node *LR_Rotation(Node *root);
+    Node *Insert(Node *root, int value);
+    void InOrder(Node *root);
+    void PreOrder(Node *root);
+    void Display_Insert(int value);
+    void Display_Preorder();
+    void Display_Inorder();
+    Node *Search(Node *root, int value);
+    void Display_Search(int value);
+    Node *Delete(Node *root, int value);
+    void Display_Delete(int value);
+    Node *succesor(Node *root);
 };
-int Dictionary::max(int a, int b)
+Node *AVL::succesor(Node *root)
 {
-    return (a > b) ? a : b;
+    while (root->left != NULL)
+    {
+        root = root->left;
+    }
+    return root;
 }
-int Dictionary::getheight(node *nnode)
+void AVL::Display_Inorder()
 {
-    if (nnode == NULL)
-        return 0;
+    InOrder(root);
+}
+void AVL::Display_Preorder()
+{
+    PreOrder(root);
+}
+void AVL ::Display_Insert(int value)
+{
+    root = Insert(root, value);
+}
+int AVL::Height(Node *root)
+{
+    if (root == NULL)
+    {
+        return -1;
+    }
+    int lh = Height(root->left);
+    int rh = Height(root->right);
+    return lh > rh ? (lh + 1) : (rh + 1);
+}
+int AVL::BalanceFactor(Node *root)
+{
+    if (root == NULL)
+    {
+        return -1;
+    }
+    int lh = Height(root->left);
+    int rh = Height(root->right);
+    return lh - rh;
+}
+Node *AVL::Insert(Node *root, int value)
+{
+    Node *pNew = new Node(value);
+    if (root == NULL)
+    {
+        root = pNew;
+        return root;
+    }
+    if (value < root->data)
+    {
+        root->left = Insert(root->left, value);
+    }
+    if (value > root->data)
+    {
+        root->right = Insert(root->right, value);
+    }
+    if (value == root->data)
+    {
+        cout << "value already there";
+        return root;
+    }
+    if (BalanceFactor(root) == 2 && BalanceFactor(root->left) == 1)
+    {
+        cout << "LL Rotation" << endl;
+        return LL_Rotation(root);
+    }
+    else if (BalanceFactor(root) == -2 && BalanceFactor(root->right) == -1)
+    {
+        cout << "RR Rotation" << endl;
+        return RR_Rotation(root);
+    }
+    else if (BalanceFactor(root) == -2 && BalanceFactor(root->right) == 1)
+    {
+        cout << "RL Rotation" << endl;
+        return RL_Rotation(root);
+    }
+    else if (BalanceFactor(root) == 2 && BalanceFactor(root->right) == -1)
+    {
+        cout << "LR Rotation" << endl;
+        return LR_Rotation(root);
+    }
+
+    return root;
+}
+Node *AVL::LL_Rotation(Node *root)
+{
+    Node *PL = root->left;
+    Node *PL_R = PL->right;
+
+    PL->right = root;
+    root->left = PL_R;
+    return PL;
+}
+Node *AVL::RR_Rotation(Node *root)
+{
+    Node *PR = root->right;
+    Node *PR_L = PR->left;
+
+    PR->left = root;
+    root->right = PR_L;
+    return PR;
+}
+Node *AVL::RL_Rotation(Node *root)
+{
+    Node*PR=root->right;
+    Node*PR_L=PR->left;
+
+    PR->left=PR_L->right;
+    root->right=PR_L->left;
+    
+    PR_L->left=root;
+    PR_L->right=PR;
+    return PR_L;
+}
+Node *AVL::LR_Rotation(Node *root)
+{
+    Node *PL = root->left;
+    Node *PL_R = PL->right;
+
+    PL->right = PL_R->left;
+    root->left = PL_R->right;
+
+    PL_R->left = PL;
+    PL_R->right = root;
+    return PL_R;
+}
+void AVL ::InOrder(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    InOrder(root->left);
+    cout << root->data << " ";
+    InOrder(root->right);
+}
+
+void AVL ::PreOrder(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    cout << root->data << " ";
+    PreOrder(root->left);
+    PreOrder(root->right);
+}
+Node *AVL::Delete(Node *root, int value)
+{
+
+    // rightmost child of left subtree->succesor
+    if (root == NULL)
+    {
+        return NULL;
+    }
     else
-        return nnode->height;
+    {
+        if (value < root->data)
+        {
+            root->left = Delete(root->left, value);
+        }
+
+        else if (value > root->data)
+        {
+            root->right = Delete(root->right, value);
+        }
+        else // Data Found
+        {
+            if (root->right == NULL)
+            {
+                return root->left;
+            }
+            else
+            {
+                Node *isuc = succesor(root->right);
+                root->data = isuc->data; // copy the element
+                root->right = Delete(root->right, isuc->data);
+            }
+        }
+    }
+    if (BalanceFactor(root) == 2 && BalanceFactor(root->left) == 1)
+    {
+        cout << "LL Rotation" << endl;
+        return LL_Rotation(root);
+    }
+    else if (BalanceFactor(root) == -2 && BalanceFactor(root->right) == -1)
+    {
+        cout << "RR Rotation" << endl;
+        return RR_Rotation(root);
+    }
+    else if (BalanceFactor(root) == -2 && BalanceFactor(root->right) == 1)
+    {
+        cout << "RL Rotation" << endl;
+        return RL_Rotation(root);
+    }
+    else if (BalanceFactor(root) == 2 && BalanceFactor(root->right) == -1)
+    {
+        cout << "LR Rotation" << endl;
+        return LR_Rotation(root);
+    }
+
+    return root;
 }
-int Dictionary::getbalance(node *n)
+
+void AVL::Display_Delete(int value)
 {
-    if (n == NULL)
-        return 0;
+    root = Delete(root, value);
+}
+Node *AVL::Search(Node *root, int value)
+{
+    if (root == NULL)
+    {
+        return NULL;
+    }
+    if (value == root->data)
+    {
+        cout << "Value present in tree" << endl;
+        return root;
+    }
+    else if (value < root->data)
+    {
+        root->left = Search(root->left, value);
+    }
     else
-        return (getheight(n->left) - getheight(n->right));
-}
-node *Dictionary::rightRotate(node *y)
-{
-    node *x = y->left;
-    node *xr = x->right;
-
-    // Update Pointers after rotation
-    x->right = y;
-    y->left = xr;
-
-    y->height = max(getheight(y->left), getheight(y->right)) + 1;
-    x->height = max(getheight(x->left), getheight(x->right)) + 1;
-    return x;
-}
-
-node *Dictionary::leftRotate(node *y)
-{
-    node *x = y->right;
-    node *t2 = x->left;
-
-    x->left = y;
-    y->right = t2;
-
-    y->height = max(getheight(y->left), getheight(y->right)) + 1;
-    x->height = max(getheight(x->left), getheight(x->right)) + 1;
-
-    return x;
-}
-
-node *Dictionary::insert(node *rnode, int key, string meaning)
-{
-    // 1. Normat BST Operation
-    if (rnode == NULL) // Empty Dictionary
-        return new node(key, meaning);
-
-    if (key < rnode->key)
-        rnode->left = insert(rnode->left, key, meaning);
-    else if (key > rnode->key)
-        rnode->right = insert(rnode->right, key, meaning);
-    else // equal value key
-        return rnode;
-
-    // 2. update height of ancestors
-    rnode->height = 1 + max(getheight(rnode->left), getheight(rnode->right));
-    // 3. Get balancing factor
-    int balance = getbalance(rnode);
-
-    // 4. perform rotations and return nre root
-    // LL Case
-    if (balance > 1 && key < rnode->left->key)
-        return rightRotate(rnode);
-
-    // RR Case
-    if (balance < -1 && key > rnode->right->key)
-        return leftRotate(rnode);
-
-    // LR Case
-    if (balance > 1 && key > rnode->left->key)
     {
-        rnode->left = leftRotate(rnode->left);
-        return rightRotate(rnode);
-    }
-
-    // RL Case
-    if (balance < -1 && key < rnode->right->key)
-    {
-        rnode->right = rightRotate(rnode->right);
-        return leftRotate(rnode);
-    }
-
-    return rnode; // no change in root
-}
-void Dictionary::preorder()
-{
-    preorderRec(root);
-}
-void Dictionary::postorder()
-{
-    postorderRec(root);
-}
-void Dictionary::inorder()
-{
-    inorderRec(root);
-}
-void Dictionary::preorderRec(node *n)
-{
-    if (n)
-    {
-        n->print();
-        preorderRec(n->left);
-        preorderRec(n->right);
+        root->right = Search(root->right, value);
     }
 }
-
-void Dictionary::inorderRec(node *n)
+void AVL::Display_Search(int value)
 {
-    if (n)
-    {
-        inorderRec(n->left);
-        n->print();
-        inorderRec(n->right);
-    }
+    root = Search(root, value);
 }
-
-void Dictionary::postorderRec(node *n)
-{
-    if (n)
-    {
-        postorderRec(n->left);
-        postorderRec(n->right);
-        n->print();
-    }
-}
-void Dictionary::insertInit(int key, string meaning)
-{
-    root = insert(root, key, meaning);
-}
-
-void Dictionary::postorder_dec()
-{
-    postorder_dec(root);
-}
-
-void Dictionary::postorder_dec(node *n)
-{
-    if (n)
-    {
-        postorder_dec(n->right);
-        n->print();
-        postorder_dec(n->left);
-    }
-}
-
 int main()
 {
-    Dictionary d;
-    d.insertInit(1, "Vaibhav");
-    d.insertInit(3, "Navnath");
-    d.insertInit(2, "Kumbhar");
-    d.insertInit(5, "Ganesha");
-    d.insertInit(4, "Five");
-
-    // d.insertInit(10,"10");
-    // d.insertInit(20,"20");
-    // d.insertInit(30,"30");
-    // d.insertInit(40,"40");
-    // d.insertInit(50,"50");
-    // d.insertInit(25,"25");
-    cout << "\nASCENDING ORDER: ";
-    d.inorder();
-
-    cout << "\nDECENDING ORDER: ";
-    d.postorder_dec();
-
-    cout << "\nPreorder: ";
-    d.preorder();
-
-    cout << "\nPostorder: ";
-    d.postorder();
+    AVL a;
+    bool flag = true;
+    int choice;
+    while (flag)
+    {
+        cout << "\n1.Insert\n2.Delete\n3.Search\n4.Inorder\n5.Preorder\n"
+             << endl;
+        cout << "What do you want to do ?" << endl;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            int n, data, key;
+            cout << "How many nodes do you want?" << endl;
+            cin >> n;
+            for (int i = 0; i < n; i++)
+            {
+                cout << "Enter the value that you want to insert" << endl;
+                cin >> data;
+                a.Display_Insert(data);
+            }
+            break;
+        case 2:
+            cout << "Enter the key that you want to Delete " << endl;
+            cin>>key;
+            a.Display_Delete(key);
+            break;
+        case 3:
+            cout << "Enter the key that you want to Search " << endl;
+            cin>>key;
+            a.Display_Search(key);
+            break;
+        case 4:
+            cout << "Inorder Traversal is: " << endl;
+            a.Display_Inorder();
+            break;
+        case 5:
+            cout << "Preorder Traversal is: " << endl;
+            a.Display_Preorder();
+            break;
+        }
+        char flag2;
+        cout << "\nDo you want to continue ";
+        cin >> flag2;
+        if (flag2 == 'n')
+        {
+            flag = false;
+        }
+    }
 
     return 0;
 }

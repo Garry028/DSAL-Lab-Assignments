@@ -6,20 +6,21 @@ using namespace std;
 class Graph
 {
 private:
-    int Matrix[N][N]; // this is matrix
+    int Adj_Matrix[N][N]; // this is matrix
     int Number_Vertices;
     int Number_Edges;
+    int Visited[N] = {0};
 
 public:
     Graph()
     {
         Number_Vertices = 0;
         Number_Edges = 0;
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < Number_Vertices; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < Number_Vertices; j++)
             {
-                Matrix[i][j] = 0;
+                Adj_Matrix[i][j] = 0;
             }
         }
     }
@@ -31,7 +32,7 @@ public:
         {
             for (int j = 0; j < Number_ver; j++)
             {
-                Matrix[i][j] = 0;
+                Adj_Matrix[i][j] = 0;
             }
         }
     }
@@ -43,7 +44,7 @@ public:
         {
             for (int j = 0; j < Number_ver; j++)
             {
-                Matrix[i][j] = 0;
+                Adj_Matrix[i][j] = 0;
             }
         }
         for (int i = 0; i < Number_edg; i++)
@@ -51,26 +52,36 @@ public:
             int u, v;
             cout << "Enter the Edge (u,v): " << endl;
             cin >> u >> v;
-            Matrix[u][v] = 1;
-            Matrix[v][u] = 1;
+            Adj_Matrix[u][v] = 1;
+            Adj_Matrix[v][u] = 1;
         }
     }
     void Create_Graph();
-    void BFS(int i);
-    void DFS(int i);
+    void BFS(int start_vertex);
+    void DFS(int start_vertex);
     void Display_Graph();
 };
 void Graph::Create_Graph()
 {
+    cout << "Enter total vertices: " << endl;
+    cin >> Number_Vertices;
     cout << "Enter The Total Number of Edges: " << endl;
     cin >> Number_Edges;
+    for (int i = 0; i < Number_Vertices; i++)
+    {
+        for (int j = 0; j < Number_Vertices; j++)
+        {
+            Adj_Matrix[i][j] = 0;
+        }
+    }
+
     for (int i = 0; i < Number_Edges; i++)
     {
         int u, v;
         cout << "Enter the Start and Destination of the edge: " << i + 1 << endl;
         cin >> u >> v;
-        Matrix[u][v] = 1;
-        Matrix[v][u] = 1;
+        Adj_Matrix[v][u] = 1;
+        Adj_Matrix[u][v] = 1;
     }
 }
 void Graph::BFS(int start_vertex)
@@ -86,9 +97,9 @@ void Graph::BFS(int start_vertex)
     {
         u = q.front();
         q.pop();
-        for (v = 1; v <= N; v++)
+        for (v = 0; v <= Number_Vertices; v++)
         {
-            if (Matrix[u][v] == 1 && Visited[v] == 0)
+            if (Adj_Matrix[u][v] == 1 && Visited[v] == 0)
             {
                 // cout << "Adjecent " << v << "Pushed In Queue";
                 cout << v << " ";
@@ -98,33 +109,33 @@ void Graph::BFS(int start_vertex)
         }
     }
 }
+
 void Graph::DFS(int start_vertex)
 {
-    int Visited[N] = {0};
-    int v;
 
     if (Visited[start_vertex] == 0) // for unvisited vertex
     {
-        cout << start_vertex;
+        cout << start_vertex << " ";
         Visited[start_vertex] = 1; // it become visited now
-        for (v = 1; v <= N; v++)
+        for (int v = 0; v <=N; v++)
         {
-            if (Matrix[start_vertex][v] == 1 && Visited[v] != 0)
+            if (Adj_Matrix[start_vertex][v] == 1 && Visited[v] == 0)
             {
                 DFS(v); // HERE We've used stack using recursion hence no need to add our external stack
             }
         }
     }
 }
+
 void Graph::Display_Graph()
 {
-    if (N > 0)
+    if (Number_Vertices > 0)
     {
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < Number_Vertices; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < Number_Vertices; j++)
             {
-                cout << Matrix[i][j] << " ";
+                cout << Adj_Matrix[i][j] << " ";
             }
             cout << endl;
         }
@@ -147,9 +158,9 @@ int main()
         cout << endl;
         cout << "Welcome To Graph !!!" << endl;
         cout << "______________________________________________________________________\n";
-        cout << "\n1.Create Graph\n2.BFS Traversal\n3.DFS Traversal\n4.Display Adjacency Matrix\n5.Exit\n\n"
+        cout << "\n1.Create Graph\n2.BFS Traversal\n3.DFS Traversal\n4.Display Adjacency Adj_Matrix\n5.Exit\n\n"
              << endl;
-        cout << "Do you want to continue" << endl;
+        cout << "\nDo you want to continue" << endl;
         cin >> choice;
         switch (choice)
         {
@@ -186,4 +197,7 @@ int main()
     }
 
     return 0;
+
+
 }
+

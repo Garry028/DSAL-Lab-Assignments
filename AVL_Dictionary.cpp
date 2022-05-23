@@ -44,18 +44,52 @@ public:
     Node *RL_Rotation(Node *root);
     Node *LR_Rotation(Node *root);
     Node *Insert(Node *root, string word, string mean);
-    void InOrder(Node *root);
-    void PreOrder(Node *root);
+    void Ascending(Node *root);
+    void Dscending(Node *root);
     void Display_Insert(string word, string mean);
     void Display_Preorder();
-    void Display_Inorder();
+    void Display_Ascending();
     Node *Search(Node *root, string word);
     void Display_Search(string word);
     Node *Delete(Node *root, string word);
     void Display_Delete(string word);
     Node *succesor(Node *root);
     void Update_Word();
+    Node *Minimum(Node *root);
+    Node *Maxximum(Node *root);
+    void Display_Min_Maxx();
 };
+Node *AVL::Minimum(Node *root)
+{
+    if (root->left == NULL)
+    {
+        return root;
+    }
+    while (root->left != NULL)
+    {
+        return Minimum(root->left);
+    }
+}
+Node *AVL::Maxximum(Node *root)
+{
+    if (root->right == NULL)
+    {
+        return root;
+    }
+    while (root->right != NULL)
+    {
+        return Minimum(root->right);
+    }
+}
+
+void AVL::Display_Min_Maxx()
+{
+    Node *pTemp1, *pTemp2;
+    pTemp1 = Minimum(root);
+    pTemp2 = Maxximum(root);
+    cout << "Minimum element is " << pTemp1->Word << endl;
+    cout << "Maximum element is " << pTemp2->Word << endl;
+}
 void AVL::Update_Word()
 {
     string wrd, Nwrd, mn;
@@ -77,13 +111,13 @@ Node *AVL::succesor(Node *root)
     }
     return root;
 }
-void AVL::Display_Inorder()
+void AVL::Display_Ascending()
 {
-    InOrder(root);
+    Ascending(root); // inorder means ascending.
 }
 void AVL::Display_Preorder()
 {
-    PreOrder(root);
+    Dscending(root);
 }
 void AVL ::Display_Insert(string word, string mean)
 {
@@ -195,27 +229,27 @@ Node *AVL::LR_Rotation(Node *root)
     PL_R->right = root;
     return PL_R;
 }
-void AVL ::InOrder(Node *root)
+void AVL ::Ascending(Node *root)
 {
     if (root == NULL)
     {
         return;
     }
 
-    InOrder(root->left);
+    Ascending(root->left);
     cout << root->Word << " --> " << root->Meaning << endl;
-    InOrder(root->right);
+    Ascending(root->right);
 }
 
-void AVL ::PreOrder(Node *root)
+void AVL ::Dscending(Node *root)
 {
     if (root == NULL)
     {
         return;
     }
+    Dscending(root->right);
     cout << root->Word << " --> " << root->Meaning << endl;
-    PreOrder(root->left);
-    PreOrder(root->right);
+    Dscending(root->left);
 }
 Node *AVL::Delete(Node *root, string word)
 {
@@ -311,10 +345,12 @@ int main()
     while (flag)
     {
         cout << "Welcome to Dictionary !!!" << endl;
-        cout << "___________________________________________\n" << endl;
-        cout << "\n1.Insert\n2.Delete\n3.Search\n4.Inorder\n5.Preorder\n6.Update\n"
+        cout << "___________________________________________\n"
              << endl;
-        cout << "___________________________________________\n" << endl;
+        cout << "\n1.Insert\n2.Delete\n3.Search\n4.Ascending Order\n5.Dscending order\n6.Update\n7.Min_Max\n"
+             << endl;
+        cout << "___________________________________________\n"
+             << endl;
 
         cout << "What do you want to do ?" << endl;
         cin >> choice;
@@ -344,16 +380,20 @@ int main()
             a.Display_Search(key_word);
             break;
         case 4:
-            cout << "Inorder Traversal is: " << endl;
-            a.Display_Inorder();
+            cout << "Ascending order is: " << endl;
+            a.Display_Ascending();
             break;
         case 5:
-            cout << "Preorder Traversal is: " << endl;
+            cout << "Descending order is: " << endl;
             a.Display_Preorder();
             break;
 
         case 6:
             a.Update_Word();
+            break;
+
+        case 7:
+            a.Display_Min_Maxx();
             break;
         }
         char flag2;

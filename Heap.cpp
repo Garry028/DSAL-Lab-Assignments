@@ -14,6 +14,7 @@ public:
         for (int i = 0; i < max; i++)
         {
             Marks_Min_Heap[i] = 0;
+            Marks_Max_Heap[i] = 0;
         }
     }
     void InsertMinHeap(int Total_Students);
@@ -31,17 +32,18 @@ void Student::InsertMinHeap(int Total_Students)
         cout << "Enter marks of the Students" << endl;
         cin >> Marks_Min_Heap[i];
 
-        int val = Marks_Min_Heap[i];
-        int j = i;                // index is equal to j
-        int Parent = (j - 1) / 2; // j is index
+        int child = i;                // index is equal to j
+        int Parent = (child - 1) / 2; // j is index
 
-        while (Marks_Min_Heap[Parent] > val && j != 0) // while the new elements value is less than it's parent
+        while (Marks_Min_Heap[Parent] > Marks_Min_Heap[child] && child != 0) // while the new elements value is less than it's parent
         {
-            Marks_Min_Heap[j] = Marks_Min_Heap[Parent];
-            j = Parent;
-            Parent = (j - 1) / 2;
+            int temp = Marks_Min_Heap[Parent]; // swapped
+            Marks_Min_Heap[Parent] = Marks_Min_Heap[child];
+            Marks_Min_Heap[child] = temp;
+
+            child = Parent;
+            Parent = (child - 1) / 2;
         }
-        Marks_Min_Heap[j] = val;
     }
 }
 void Student::InsertMaxHeap(int Total_Students)
@@ -51,17 +53,18 @@ void Student::InsertMaxHeap(int Total_Students)
         cout << "Enter marks of the Students" << endl;
         cin >> Marks_Max_Heap[i];
 
-        int val = Marks_Max_Heap[i];
-        int j = i;                // index is equal to j
-        int Parent = (j - 1) / 2; // j is index
+        int child = i;                // index is equal to j
+        int Parent = (child - 1) / 2; // j is index
 
-        while (Marks_Max_Heap[Parent] < val && j != 0) // while the new elements value is less than it's parent
+        while (Marks_Max_Heap[Parent] < Marks_Max_Heap[i] && child != 0) // while the new elements value is less than it's parent
         {
-            Marks_Max_Heap[j] = Marks_Max_Heap[Parent];
-            j = Parent;
-            Parent = (j - 1) / 2;
+            int temp = Marks_Min_Heap[Parent];
+            Marks_Max_Heap[Parent] = Marks_Max_Heap[child];
+            Marks_Max_Heap[child] = temp;
+
+            child = Parent;
+            Parent = (child - 1) / 2;
         }
-        Marks_Max_Heap[j] = val;
     }
 }
 

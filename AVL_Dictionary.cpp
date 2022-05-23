@@ -49,7 +49,7 @@ public:
     void Display_Insert(string word, string mean);
     void Display_Preorder();
     void Display_Ascending();
-    Node *Search(Node *root, string word);
+    Node *Search(Node *root, string word,int count);
     void Display_Search(string word);
     Node *Delete(Node *root, string word);
     void Display_Delete(string word);
@@ -312,8 +312,9 @@ void AVL::Display_Delete(string word)
 {
     root = Delete(root, word);
 }
-Node *AVL::Search(Node *root, string word)
+Node *AVL::Search(Node *root, string word,int count)
 {
+    count++;
     if (root == NULL)
     {
         return NULL;
@@ -321,20 +322,23 @@ Node *AVL::Search(Node *root, string word)
     if (word == root->Word)
     {
         cout << "Value present in tree" << endl;
+        cout<<"Total comparison are "<<count<<endl;
         return root;
     }
     else if (word < root->Word)
     {
-        root->left = Search(root->left, word);
+        root->left = Search(root->left, word,count
+        );
     }
     else
     {
-        root->right = Search(root->right, word);
+        root->right = Search(root->right, word,count);
     }
 }
 void AVL::Display_Search(string word)
 {
-    root = Search(root, word);
+
+    root = Search(root, word,0);
 }
 int main()
 {
